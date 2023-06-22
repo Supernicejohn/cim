@@ -8,6 +8,7 @@ config.blinking = true
 config.text_color = colors.white
 config.background_color = colors.black
 config.escape_key = keys.leftCtrl
+config.tab_disp = "   "
 
 --### End Default config ###
 

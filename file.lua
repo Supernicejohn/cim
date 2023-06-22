@@ -43,6 +43,9 @@ file.open = function(path, rel)
 		t.text[#t.text+1] = line
 	end
 	file.close()
+	if #t.text == 0 then
+		t.text[1] = ""
+	end
 	return path --absolute path
 end
 file.save = function(path, rel)
