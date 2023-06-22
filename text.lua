@@ -46,6 +46,9 @@ t.remove = function(caret1, caret2, mode)
 		end
 	end
 end
+t.tab = function()
+	t.write("\t", c.caret)
+end
 t.backspace = function()
 	if c.caret.x == 1 and c.caret.y == 1 then
 		return

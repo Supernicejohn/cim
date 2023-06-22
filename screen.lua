@@ -20,17 +20,18 @@ w.init = function()
 	
 end
 w.keep_focus = function(mode)
+	local xp, yp = w.get_caret_pos()
 	if not mode then --default behavior
-		while c.caret.x > (w.screen.x - 1 + w.screen.w) do
+		while xp > (w.screen.x - 1 + w.screen.w) do
 			w.screen.x = w.screen.x + 1;
 		end
-		while c.caret.x < (w.screen.x) do
+		while xp < (w.screen.x) do
 			w.screen.x = w.screen.x - 1
 		end
-		while c.caret.y > (w.screen.y - 1 + w.screen.h) do
+		while yp > (w.screen.y - 1 + w.screen.h) do
 			w.screen.y = w.screen.y + 1
 		end
-		while c.caret.y < (w.screen.y) do
+		while yp < (w.screen.y) do
 			w.screen.y = w.screen.y - 1
 		end
 	end
@@ -53,6 +54,7 @@ w.render_bar = function()
 end
 w.screen_line = function(n) --TODO: make scrolling work correctly
 	local y = w.screen.y
+	local line = ""
 	if config.linewrap then
 		local index = w.screen.y
 		local line = t.text[index] --get first visible row on screen
@@ -72,8 +74,10 @@ w.screen_line = function(n) --TODO: make scrolling work correctly
 		end
 	else
 		if t.text[w.screen.y + n - 1] then
-			return t.text[w.screen.y + n - 1]:sub(w.screen.x, 
-				w.screen.x - 1 + w.screen.w)
+			line = t.text[w.screen.y + n - 1]
+			line = line:gsub("\t", config.tab_disp)
+			line = line:sub(w.screen.x, w.screen.x - 1 + w.screen.w)
+			return line
 		else
 			return "~"
 		end
@@ -88,13 +92,19 @@ w.draw_text = function()
 	end
 	w.draw_caret()
 end
+w.get_caret_pos = function()
+	local line = t.text[c.caret.y]:sub(1, c.caret.x-1)
+	line = line:gsub("\t", config.tab_disp)
+	return #line+1, c.caret.y
+end
 w.draw_caret = function()
 	term.redirect(w.text)
-	term.setCursorPos(c.caret.x-w.screen.x+1, c.caret.y-w.screen.y+1)
+	local xp, yp = w.get_caret_pos()
+	term.setCursorPos(xp - w.screen.x + 1, yp - w.screen.y + 1)
 	local bgc = term.getBackgroundColor()
 	term.setBackgroundColor(c.bgcol)
 	local char = w.screen_line(c.caret.y-w.screen.y+1)
-		:sub(c.caret.x-w.screen.x+1, c.caret.x-w.screen.x+1)
+		:sub(xp-w.screen.x+1, xp-w.screen.x+1)
 	if c.current_blink then
 		if not char or #char == 0 then
 			char = "_"

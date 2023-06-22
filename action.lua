@@ -49,6 +49,8 @@ a.textkeys = function(event)
 			t.enter()
 		elseif event[2] == keys.backspace then
 			t.backspace()
+		elseif event[2] == keys.tab then
+			t.tab()
 		end
 	end
 end
