@@ -1,5 +1,7 @@
 local a = {}
 
+a.vactions = {}
+
 a.init = function()
 	var.state = "normal"
 end
@@ -63,6 +65,33 @@ a.control_keys = function(event)
 	end
 	return false
 end
+a.buffer = function(event)
+	if not a.buf then
+		a.buf = ""
+	end
+	if event[1] == "char" then
+		a.buf = a.buf..event[2]
+	end
+end
+a.vmatch = function() -- attempt to execute what's in buf
+	if a.vactions[a.buf] then
+		a.vactions[a.buf]()
+		a.buf = nil
+		return
+	end
+	for k,v in pairs(a.vactions) do
+		if k:sub(1, #a.buf) == a.buf then
+			return
+		end
+	end
+	a.buf = nil -- no valid matching
+end
+a.vkeys = function(event)
+	if event[1] == "char" then
+		a.buffer(event)
+		a.vmatch()
+	end
+end
 a.normal = function(event)
 	if event[1] == "key" then
 		if a.control_keys(event) then
@@ -76,6 +105,8 @@ a.normal = function(event)
 			var.state = "command"
 		elseif event[2] == "v" then
 			var.state = "visual"
+		else
+			a.vkeys(event)
 		end
 	end
 end
@@ -139,6 +170,54 @@ a.yield = function()
 		local str = stext..w.msg_str:sub(#stext+1, 
 			w.screen.w - #caret_str - 3)..caret_str
 		b.message(str)
+	end
+end
+
+-- basic v actions, to be redone later --
+
+a.vactions.zz = function()
+	w.screen.y = c.caret.y - (w.screen.h / 2)
+	if w.screen.y < 1 then
+		w.screen.y = 1
+	end
+end
+a.vactions.o = function()
+	var.state = "text"
+	c.caret.y = c.caret.y + 1
+	table.insert(t.text, c.caret.y, "")
+end
+a.vactions.A = function()
+	var.state = "text"
+	c.caret.x = #t.text[c.caret.y] + 1
+end
+a.vactions.a = function()
+	var.state = "text"
+	c.caret.x = c.caret.x + 1
+	if c.caret.x > #t.text[c.caret.y] + 1 then
+		c.caret.x = #t.text[c.caret.y] + 1
+	end
+end
+a.vactions.dd = function()
+	if t.text[c.caret.y] then
+		table.remove(t.text, c.caret.y)
+		if #t.text < c.caret.y and #t.text > 0 then
+			c.caret.y = c.caret.y - 1
+		elseif #t.text == 1 then
+			t.text[1] = "" -- not quite right, but close			
+		end
+	end
+end
+a.vactions.x = function()
+	if t.text[c.caret.y] then
+		if #t.text[c.caret.y]:sub(c.caret.x, c.caret.x) > 0 then
+			t.text[c.caret.y] = t.text[c.caret.y]:sub(
+				1, c.caret.x - 1)..t.text[c.caret.y]:sub(
+				c.caret.x + 1, #t.text[c.caret.y])
+		elseif #t.text > c.caret.y then
+			local line = t.text[c.caret.y + 1]
+			table.remove(t.text, c.caret.y + 1)
+			t.text[c.caret.y] = t.text[c.caret.y]..line
+		end
 	end
 end
 
