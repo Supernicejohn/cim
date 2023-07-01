@@ -184,7 +184,13 @@ end
 a.vactions.o = function()
 	var.state = "text"
 	c.caret.y = c.caret.y + 1
+	c.caret.x = 1
 	table.insert(t.text, c.caret.y, "")
+end
+a.vactions.O = function()
+	var.state = "text"
+	c.caret.x = 1
+	table.insert(t.text, c.caret.y - 1, "")
 end
 a.vactions.A = function()
 	var.state = "text"
