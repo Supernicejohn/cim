@@ -1,4 +1,5 @@
 local c = {}
+local var = require("var")
 
 c.init = function()
 	c.caret = {}
