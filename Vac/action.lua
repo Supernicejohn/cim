@@ -99,9 +99,9 @@ a.normal = function(event)
 		end
 		a.movement(event)
 	elseif event[1] == "char" then
-		if event[2] == "i" then
-			var.state = "text"
-		elseif event[2] == ":" then
+		--if event[2] == "i" then
+			--var.state = "text"
+		if event[2] == ":" then
 			var.state = "command"
 		elseif event[2] == "v" then
 			var.state = "visual"
@@ -143,6 +143,9 @@ a.command = function(event)
 			var.state = "normal"
 			return
 		elseif event[2] == keys.backspace then
+			if #b.history[1] == 0 then
+				var.state = "normal"
+			end
 			b.history[1] = b.history[1]:sub(1, #b.history[1]-1)
 			return
 		end
@@ -176,7 +179,7 @@ end
 -- basic v actions, to be redone later --
 
 a.vactions.zz = function()
-	w.screen.y = c.caret.y - (w.screen.h / 2)
+	w.screen.y = c.caret.y - math.floor(w.screen.h / 2)
 	if w.screen.y < 1 then
 		w.screen.y = 1
 	end
@@ -203,6 +206,13 @@ a.vactions.a = function()
 		c.caret.x = #t.text[c.caret.y] + 1
 	end
 end
+a.vactions.i = function()
+	var.state = "text"
+end
+a.vactions.I = function()
+	var.state = "text"
+	c.caret.x = 1
+end
 a.vactions.dd = function()
 	if t.text[c.caret.y] then
 		table.remove(t.text, c.caret.y)
@@ -224,6 +234,46 @@ a.vactions.x = function()
 			table.remove(t.text, c.caret.y + 1)
 			t.text[c.caret.y] = t.text[c.caret.y]..line
 		end
+	end
+end
+a.vactions.w = function()
+	if not t.text[c.caret.y] then
+		error("???")
+		return
+	end
+	local x = c.caret.x
+	local y = c.caret.y
+	local mode = false
+	local found = false
+	while y <= #t.text do
+		while x <= #t.text[y] do
+			local char = t.text[y]:sub(x,x)
+			if not mode then
+				if (char ~= " " and char ~= "\t") then
+					--do nothing, just increment
+				else
+					mode = true
+				end 
+			else
+				if (char ~= " " or char ~= "\t") then
+					found = true
+					break
+				end
+			end
+			x = x + 1
+		end
+		if found then
+			break
+		end
+		x = 1
+		y = y + 1
+	end
+	if t.text[y] and #t.text[y] + 2 < x then
+		--error("y = "..y..", x = "..x)
+		c.caret.y = y
+		c.caret.x = x
+	else
+		--error("y = "..y..", x = "..x)
 	end
 end
 

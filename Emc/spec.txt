@@ -1,0 +1,7 @@
+This is the Emc, or Editor-MaCro directory
+As you may be able to guess this takes inspiration
+from the other leading text editor, Emacs.
+
+While I don't use Emacs I find it fascinating and I
+wish to incorporate some of the mindset behind it.
+This will be very open to other's ideas ^^

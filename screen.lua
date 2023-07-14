@@ -107,14 +107,23 @@ w.draw_caret = function()
 		:sub(xp-w.screen.x+1, xp-w.screen.x+1)
 	if c.current_blink then
 		if not char or #char == 0 then
-			char = "_"
+			if var.state == "text" then
+				char = config.cursor_insert
+			else
+				char = config.cursor_normal
+			end
 		end
 		term.write(char)
 	else
 		if not char or #char == 0 then
 			term.write(" ")
 		else
-			term.write("_")
+			if var.state == "text" then
+				char = config.cursor_insert
+			else
+				char = config.cursor_normal
+			end
+			term.write(char)
 		end
 	end
 	term.setBackgroundColor(bgc)
