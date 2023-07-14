@@ -1,0 +1,5 @@
+This is the Vac, or V-Actions directory
+V-Actions are actions set to mimic Vim funcitonality.
+
+While not 100% accurate, a best-effort approach with 
+relation to how much I use respective feature is used ;)
