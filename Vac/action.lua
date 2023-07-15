@@ -73,14 +73,24 @@ a.buffer = function(event)
 		a.buf = a.buf..event[2]
 	end
 end
-a.vmatch = function() -- attempt to execute what's in buf
-	if a.vactions[a.buf] then
-		a.vactions[a.buf]()
+a.vmatch = function(buf, num) -- attempt to execute what's in buf
+	if a.vactions[buf] then
+		a.vactions[buf](num)
 		a.buf = nil
 		return
 	end
+	if buf:sub(1,1):find("%d") then
+		local start = 1
+		while buf:sub(start,start):find("%d") do
+			start = start + 1
+		end
+		if buf:len() > start then
+			a.vmatch(buf:sub(start, #buf), a.buf:sub(1, start - 1))
+			return
+		end
+	end
 	for k,v in pairs(a.vactions) do
-		if k:sub(1, #a.buf) == a.buf then
+		if k:sub(1, #buf) == buf then
 			return
 		end
 	end
@@ -89,7 +99,7 @@ end
 a.vkeys = function(event)
 	if event[1] == "char" then
 		a.buffer(event)
-		a.vmatch()
+		a.vmatch(a.buf)
 	end
 end
 a.normal = function(event)
@@ -193,7 +203,11 @@ end
 a.vactions.O = function()
 	var.state = "text"
 	c.caret.x = 1
-	table.insert(t.text, c.caret.y - 1, "")
+	if c.caret.y > 1 then
+		table.insert(t.text, c.caret.y - 1, "")
+	elseif c.caret.y == 1 then
+		table.insert(t.text, 1, "")
+	end
 end
 a.vactions.A = function()
 	var.state = "text"
@@ -213,7 +227,7 @@ a.vactions.I = function()
 	var.state = "text"
 	c.caret.x = 1
 end
-a.vactions.dd = function()
+a.vactions.dd = function(num)
 	if t.text[c.caret.y] then
 		table.remove(t.text, c.caret.y)
 		if #t.text < c.caret.y and #t.text > 0 then
@@ -221,6 +235,9 @@ a.vactions.dd = function()
 		elseif #t.text == 1 then
 			t.text[1] = "" -- not quite right, but close			
 		end
+	end
+	if num and num > 0 then
+		a.vactions.dd(num - 1)
 	end
 end
 a.vactions.x = function()
@@ -276,5 +293,10 @@ a.vactions.w = function()
 		--error("y = "..y..", x = "..x)
 	end
 end
-
+a.vactions.gg = function()
+	c.caret.y = 1
+end
+a.vactions.G = function()
+	c.caret.y = #t.text
+end
 return a
