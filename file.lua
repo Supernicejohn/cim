@@ -1,4 +1,5 @@
 local file = {}
+local var = manager.getpkg("var")
 
 file.init = function()
 	file.files = {}

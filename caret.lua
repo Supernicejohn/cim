@@ -1,14 +1,17 @@
 local c = {}
-local var = require("var")
+local var = manager.getpkg("var")
+local config = manager.getpkg("config")
+c.caret = {}
 
 c.init = function()
-	c.caret = {}
 	c.caret.x = 1
 	c.caret.y = 1
 	c.current_blink = true
-	c.start_blink()
 	c.bgcol = colors.black
 	c.fgcol = colors.white
+end
+c.start = function()
+	c.start_blink()
 end
 c.start_blink = function()
 	if c.blink_timer then

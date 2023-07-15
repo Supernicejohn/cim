@@ -1,4 +1,10 @@
 local a = {}
+local b = manager.getpkg("command")
+local var = manager.getpkg("var")
+local c = manager.getpkg("caret")
+local w = manager.getpkg("screen")
+local config = manager.getpkg("config")
+local t = manager.getpkg("text")
 
 a.vactions = {}
 
@@ -84,8 +90,8 @@ a.vmatch = function(buf, num) -- attempt to execute what's in buf
 		while buf:sub(start,start):find("%d") do
 			start = start + 1
 		end
-		if buf:len() > start then
-			a.vmatch(buf:sub(start, #buf), a.buf:sub(1, start - 1))
+		if a.buf:len() > start then
+			a.vmatch(a.buf:sub(start, #buf), a.buf:sub(1, start - 1))
 			return
 		end
 	end

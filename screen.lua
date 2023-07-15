@@ -1,23 +1,42 @@
-local w = {}
+local w = {
+	term = {},
+	dimensions = {},
+	screen = {},
+	text = {},
+	bar = {},
+	msg_str = ""
+}
+local t = manager.getpkg("text")
+local c = manager.getpkg("caret")
+local config = manager.getpkg("config")
+local var = manager.getpkg("var")
+local b = manager.getpkg("command")
 
 w.init = function()
-	w.term = term.current()
-	w.dimensions = {}
-	w.screen = {}
+	local tbl = {}
+	tbl = term.current()
+	for k,v in pairs(tbl) do
+		w.term[k] = v
+	end
 	w.dimensions.w, w.dimensions.h = w.term.getSize()
 	w.screen.x = 1
 	w.screen.y = 1
 	w.screen.w = w.dimensions.w
 	w.screen.h = w.dimensions.h - 1
-	w.text = window.create(w.term, 1, 1,
+	tbl  = window.create(w.term, 1, 1,
 			w.dimensions.w, w.dimensions.h-1)
-	w.bar = window.create(w.term, 1, w.dimensions.h,
+	for k,v in pairs(tbl) do
+		w.text[k] = v
+	end
+	tbl = window.create(w.term, 1, w.dimensions.h,
 			w.dimensions.w, 1)
+	for k,v in pairs(tbl) do
+		w.bar[k] = v
+	end
 	w.msg_str = ""
 	for i=1, w.screen.w do
 		w.msg_str = w.msg_str.." "
 	end
-	
 end
 w.keep_focus = function(mode)
 	local xp, yp = w.get_caret_pos()
@@ -132,7 +151,7 @@ w.draw_bar = function()
 	term.redirect(w.bar)
 	term.clearLine()
 	term.setCursorPos(1,1)
-	term.write(b.text)
+	term.write(b.gettext())
 end
 
 return w

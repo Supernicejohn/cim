@@ -1,10 +1,17 @@
-local b = {}
+local b = {
+	history = {},
+	text = ""
+}
+local var = manager.getpkg("var")
+local file = manager.getpkg("file")
 b.init = function()
-	b.history = {[1] = ""}
-	b.text = ""
+	b.history[1] = ""
 end
 b.message = function(str)
 	b.text = str
+end
+b.gettext = function()
+	return b.text
 end
 b.run = function()
 	--Interpret commands TODO

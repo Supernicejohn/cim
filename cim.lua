@@ -1,52 +1,27 @@
-manager = require("manager")
-var = {}
-t = {} 
-b = {}
-c = {}
-w = {}
-a = {}
-file = {}
-config = {}
-std = {}
-keymap = {} --key mappings/controls
---var = require("var") -- running vars
---t = require("text") --text
---b = require("command") --'bar'
---c = require("caret") --caret
---w = require("screen") --screen
---a = require("Vac.action") --actions
---file = require("file") --I/O
---config = require("config") --configurations
---std = require("std") --err/msgs
-manager.addpkg("var")
-manager.addpkg("text")
-manager.addpkg("command")
-manager.addpkg("caret")
-manager.addpkg("screen")
-manager.addpkg("Vac/action")
-manager.addpkg("file")
-manager.addpkg("std")
-manager.addpkg("config")
--- GET
-var = manager.getpkg("var")
-t = manager.getpkg("text")
-b = manager.getpkg("command")
-c = manager.getpkg("caret")
-w = manager.getpkg("screen")
-a = manager.getpkg("Vac/action")
-file = manager.getpkg("file")
-std = manager.getpkg("std")
-config = manager.getpkg("config")
---print("Debug over, dummy sleep of 5s")
---sleep(5)
-var.args = {...}
 
-t.init()
-file.init()
-c.init()
-a.init()
-b.init()
-w.init()
+-- GET
+local var = manager.getpkg("var")
+local t = manager.getpkg("text")
+local b = manager.getpkg("command")
+local c = manager.getpkg("caret")
+local w = manager.getpkg("screen")
+local a = manager.getpkg("Vac/action")
+local file = manager.getpkg("file")
+local std = manager.getpkg("std")
+local config = manager.getpkg("config")
+local args = {...}
+for k,v in pairs(args) do
+	var.args[k] = v
+end
+
+manager.listpkgs()
+--t.init()
+--file.init()
+--c.init()
+--a.init()
+--b.init()
+--w.init()
+c.start()
 
 while not var.exit do
 	a.yield()

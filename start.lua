@@ -25,7 +25,7 @@ Untrusted (unstable) modules/scripts should be placed
 local args = {...}
 
 -- 1, load manager
-local manager = require("manager")
+_G.manager = require("manager")
 
 -- config manager
 local i = 1
@@ -45,4 +45,30 @@ end
 
 -- 2 manager loads internal modules
 
+manager.getpkg("var")
+manager.getpkg("text")
+manager.getpkg("command")
+manager.getpkg("caret")
+manager.getpkg("screen")
+manager.getpkg("Vac/action")
+manager.getpkg("file")
+manager.getpkg("std")
+manager.getpkg("config")
+
+manager.addpkg("var")
+manager.addpkg("text")
+manager.addpkg("command")
+manager.addpkg("caret")
+manager.addpkg("screen")
+manager.addpkg("Vac/action")
+manager.addpkg("file")
+manager.addpkg("std")
+manager.addpkg("config")
+-- 3 manager loads external modules
+
+-- 4 script starts preload
+
+-- 5 start of cim/ECiMm
+
+shell.run("cim.lua")
 

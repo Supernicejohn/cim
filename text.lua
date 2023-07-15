@@ -1,4 +1,7 @@
 local t = {}
+local file = manager.getpkg("file")
+local config = manager.getpkg("config")
+local c = manager.getpkg("caret")
 
 t.init = function()
 	t.text = {}
