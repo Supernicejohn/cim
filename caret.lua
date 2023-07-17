@@ -1,7 +1,7 @@
-local c = {}
+local c = {caret = {}}
 local var = manager.getpkg("var")
 local config = manager.getpkg("config")
-c.caret = {}
+local t = manager.getpkg("text")
 
 c.init = function()
 	c.caret.x = 1
@@ -15,7 +15,7 @@ c.start = function()
 end
 c.start_blink = function()
 	if c.blink_timer then
-		os.stopTimer(c.blink_timer)
+		os.cancelTimer(c.blink_timer)
 	end
 	c.blink_timer = os.startTimer(0.4)
 end

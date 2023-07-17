@@ -73,7 +73,6 @@ end
 manager.getpkg = function(str, strict)
 	local keys = {manager.split(str)}
 	local walk = manager.pkgs
-	local found = false
 	for i=1, #keys do
 		if walk[keys[i]] then
 			walk = walk[keys[i]]
@@ -81,18 +80,8 @@ manager.getpkg = function(str, strict)
 			walk[keys[i]] = {}
 			walk = walk[keys[i]]
 		end
-		if i==#keys then
-			found = true
-		end
 	end
-	if found then
-		return walk
-	else
-		
-	end
-	--[[if not strict then
-		manager.getany(manager.pkgs, str)
-	end]]
+	return walk
 end
 
 manager.getany = function(base, str)

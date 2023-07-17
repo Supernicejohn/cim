@@ -169,16 +169,21 @@ a.command = function(event)
 		b.history[1] = b.history[1]..event[2]
 	end
 end
+a.blnk = os.startTimer(0.4)
 a.yield = function()
+	if not c.blink_timer then
+		c.start_blink()
+	end
 	--w.render_bar()
 	local e = {coroutine.yield()}
 	if e[1] == "terminate" then
 		b.message("Use ':q!' to exit")
 	elseif e[1] == "timer" then
-		if e[2] == c.blink_timer then
+		if e[2] == a.blnk then
 			c.current_blink = not c.current_blink
 			c.blink_timer = nil
-			c.start_blink()
+			--c.start_blink()
+			a.blnk = os.startTimer(0.4)
 		end
 	elseif a[var.state] then
 		a[var.state](e)

@@ -1,10 +1,13 @@
 local file = {}
 local var = manager.getpkg("var")
+local t = manager.getpkg("text")
 
 file.init = function()
 	file.files = {}
 	file.edited = {}
 	file.active = 1
+end
+file.start = function()
 	if #var.args > 0 then
 		file.files[1] = file.open(var.args[1], true)
 		if not file.files[1] then

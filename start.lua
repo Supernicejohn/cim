@@ -27,33 +27,18 @@ local args = {...}
 -- 1, load manager
 _G.manager = require("manager")
 
--- config manager
-local i = 1
-while true do
-	if not args[i] then
-		break
-	end
-	if args[i] == "-v" then
-		manager._verbose = true
-	end
-	if args[i] == "-p" then
-		manager._path = args[i + 1] or "/"
-		i = i + 1
-	end
-	i = i + 1
-end
 
 -- 2 manager loads internal modules
 
-manager.getpkg("var")
-manager.getpkg("text")
-manager.getpkg("command")
-manager.getpkg("caret")
-manager.getpkg("screen")
-manager.getpkg("Vac/action")
-manager.getpkg("file")
-manager.getpkg("std")
-manager.getpkg("config")
+--manager.getpkg("var")
+--manager.getpkg("text")
+--manager.getpkg("command")
+--manager.getpkg("caret")
+--manager.getpkg("screen")
+--manager.getpkg("Vac/action")
+--manager.getpkg("file")
+--manager.getpkg("std")
+--manager.getpkg("config")
 
 manager.addpkg("var")
 manager.addpkg("text")
@@ -70,5 +55,5 @@ manager.addpkg("config")
 
 -- 5 start of cim/ECiMm
 
-shell.run("cim.lua")
+shell.run("cim.lua", table.unpack(args))
 

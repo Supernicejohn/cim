@@ -21,6 +21,7 @@ manager.listpkgs()
 --a.init()
 --b.init()
 --w.init()
+file.start()
 c.start()
 
 while not var.exit do
